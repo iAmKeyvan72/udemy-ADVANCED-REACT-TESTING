@@ -30,8 +30,8 @@ const notErrorToastOptionsAction: PayloadAction<ToastOptions> = {
   payload: notErrorToastOptions,
 };
 
-test('do not send analytics data when there is no foookin error', () => {
-  return expectSaga(logErrorToasts, notErrorToastOptionsAction)
+test('do not send analytics data when there is no foookin error', async () => {
+  await expectSaga(logErrorToasts, notErrorToastOptionsAction)
     .not.call.fn(logErrorToast)
     .run();
 });
