@@ -71,9 +71,7 @@
     "react/react-in-jsx-scope": "off",
     "prettier/prettier": [
       "error",
-      {
-        "endOfLine": "auto"
-      }
+      { "singleQuote": true, "parser": "flow", "endOfLine": "auto" }
     ],
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-curly-newline": "off"
