@@ -1,6 +1,6 @@
-import { PayloadAction } from "@reduxjs/toolkit";
-import axios, { CancelTokenSource } from "axios";
-import { SagaIterator } from "redux-saga";
+import { PayloadAction } from '@reduxjs/toolkit';
+import axios, { CancelTokenSource } from 'axios';
+import { SagaIterator } from 'redux-saga';
 import {
   call,
   cancel,
@@ -10,17 +10,17 @@ import {
   select,
   take,
   takeEvery,
-} from "redux-saga/effects";
+} from 'redux-saga/effects';
 
-import { HoldReservation } from "../../../../../shared/types";
-import { showToast } from "../../toast/redux/toastSlice";
-import { ToastOptions } from "../../toast/types";
+import { HoldReservation } from '../../../../../shared/types';
+import { showToast } from '../../toast/redux/toastSlice';
+import { ToastOptions } from '../../toast/types';
 import {
   cancelPurchaseServerCall,
   releaseServerCall,
   reserveTicketServerCall,
-} from "../api";
-import { TicketAction } from "../types";
+} from '../api';
+import { TicketAction } from '../types';
 import {
   endTransaction,
   holdTickets,
@@ -31,7 +31,7 @@ import {
   startTicketAbort,
   startTicketPurchase,
   startTicketRelease,
-} from "./ticketSlice";
+} from './ticketSlice';
 
 export function generateErrorToastOptions(
   error: string,
@@ -39,17 +39,17 @@ export function generateErrorToastOptions(
 ): ToastOptions {
   const titleIntro = ticketAction
     ? `Could not ${ticketAction} tickets`
-    : "Ticket error";
+    : 'Ticket error';
   return {
     title: `${titleIntro}: ${error}`,
-    status: "error",
+    status: 'error',
   };
 }
 
 // cancel or abort after hold but before purchase has been initiated
 function* releaseTickets(payload: ReleasePayload): SagaIterator {
   const { reservation, reason } = payload;
-  yield put(showToast({ title: reason, status: "warning" }));
+  yield put(showToast({ title: reason, status: 'warning' }));
   yield call(cancelTransaction, reservation);
 }
 
@@ -89,7 +89,7 @@ export function* purchaseTickets(
       yield put(showToast(errorToastOptions));
       yield call(cancelTransaction, holdReservation);
     } else {
-      yield put(showToast({ title: "tickets purchased", status: "success" }));
+      yield put(showToast({ title: 'tickets purchased', status: 'success' }));
     }
   } catch (e) {
     yield call(cancelPurchaseServerCall, purchaseReservation);
@@ -97,7 +97,7 @@ export function* purchaseTickets(
   } finally {
     if (yield cancelled()) {
       yield call(cancelPurchaseServerCall, purchaseReservation);
-      yield put(showToast({ title: "purchase canceled", status: "warning" }));
+      yield put(showToast({ title: 'purchase canceled', status: 'warning' }));
       yield call(cancelTransaction, holdReservation);
     } else {
       yield call(releaseServerCall, holdReservation);
